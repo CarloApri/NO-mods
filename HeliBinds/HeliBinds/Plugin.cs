@@ -20,12 +20,20 @@ public class Plugin : BaseUnityPlugin
     internal static new ManualLogSource Logger;
     public static Plugin Instance;
 
+    // BepInEx writes config sections alphabetically and ignores the order they were bound in; keys
+    // within a section do keep theirs. So the order below controls the file only within each section.
+    private const string SectionConfig = "Config";
+    private const string SectionOverrides = "Overrides";
+    private const string SectionAircraft = "Aircraft";
+
     public static ConfigEntry<bool> Enabled;
-    public static ConfigEntry<bool> UseAircraftList;
+
     public static ConfigEntry<bool> OverridePitch;
     public static ConfigEntry<bool> OverrideRoll;
     public static ConfigEntry<bool> OverrideYaw;
     public static ConfigEntry<bool> OverrideCollective;
+
+    public static ConfigEntry<bool> UseAircraftList;
 
     /// <summary>Rewired action ids, filled in by the registration patch. -1 until then.</summary>
     public static readonly Dictionary<HeliAxis, int> ActionIds = new();
@@ -45,41 +53,41 @@ public class Plugin : BaseUnityPlugin
         AircraftList = new AircraftListManager();
 
         Enabled = Config.Bind(
-            "Config",
+            SectionConfig,
             "Enabled",
             true,
             "Master switch for the whole mod.");
 
+        OverridePitch = Config.Bind(
+            SectionOverrides,
+            "OverridePitch",
+            false,
+            "Drive pitch from 'Helicopter Pitch' on rotorcraft instead of the normal Pitch binding.");
+        OverrideRoll = Config.Bind(
+            SectionOverrides,
+            "OverrideRoll",
+            true,
+            "Drive roll from 'Helicopter Roll' on rotorcraft instead of the normal Roll binding.");
+        OverrideYaw = Config.Bind(
+            SectionOverrides,
+            "OverrideYaw",
+            true,
+            "Drive yaw from 'Helicopter Yaw' on rotorcraft instead of the normal Yaw binding.");
+        OverrideCollective = Config.Bind(
+            SectionOverrides,
+            "OverrideCollective",
+            false,
+            "Drive the collective from 'Helicopter Collective' on rotorcraft instead of the normal "
+            + "Throttle binding.");
+
         UseAircraftList = Config.Bind(
-            "Aircraft",
+            SectionAircraft,
             "UseAircraftList",
             false,
             "When false, the helicopter controls activate on any aircraft the game reports as having "
             + "a collective (takeoffDistance == 0), so new aircraft work without any editing. When "
             + "true, HeliBindsAircraft.json decides instead. That file is generated and kept up to "
             + "date either way, pre-filled with what the automatic detection would have chosen.");
-
-        OverridePitch = Config.Bind(
-            "Overrides",
-            "OverridePitch",
-            false,
-            "Drive pitch from 'Helicopter Pitch' on rotorcraft instead of the normal Pitch binding.");
-        OverrideRoll = Config.Bind(
-            "Overrides",
-            "OverrideRoll",
-            true,
-            "Drive roll from 'Helicopter Roll' on rotorcraft instead of the normal Roll binding.");
-        OverrideYaw = Config.Bind(
-            "Overrides",
-            "OverrideYaw",
-            true,
-            "Drive yaw from 'Helicopter Yaw' on rotorcraft instead of the normal Yaw binding.");
-        OverrideCollective = Config.Bind(
-            "Overrides",
-            "OverrideCollective",
-            false,
-            "Drive the collective from 'Helicopter Collective' on rotorcraft instead of the normal "
-            + "Throttle binding.");
 
         // An override with nothing bound to it would leave that axis dead, since this mod replaces
         // the vanilla binding rather than adding to it. Hence per-axis switches, off for the two

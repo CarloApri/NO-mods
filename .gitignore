@@ -26,6 +26,14 @@ MKModsNO-main/
 NuclearMods-main/
 YawOnMouse-main/
 
+# Reference footage the cinematic camera was modelled on, and working captures.
+# Someone else's game in part, and gameplay recordings at that — useful locally,
+# not ours to redistribute.
+.multimedia/
+
+# Game logs kept for reading HUD hierarchy dumps out of
+.logs/
+
 # Personal scratch: logs, the AHK script these mods replaced, config files
 # copied out of the game for reference
 *.log

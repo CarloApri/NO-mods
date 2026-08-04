@@ -40,14 +40,17 @@ register the actions, then bind the poles you want.
 
 `BepInEx\config\HeliBinds.cfg`
 
-| Key | Default | Meaning |
-| --- | --- | --- |
-| `Enabled` | `true` | Master switch. |
-| `UseAircraftList` | `false` | `false` = automatic rotorcraft detection. `true` = `HeliBindsAircraft.json` decides. |
-| `OverridePitch` | `false` | Pitch comes from `Helicopter Pitch`. |
-| `OverrideRoll` | `true` | Roll comes from `Helicopter Roll`. |
-| `OverrideYaw` | `true` | Yaw comes from `Helicopter Yaw`. |
-| `OverrideCollective` | `false` | Collective comes from `Helicopter Collective`. |
+BepInEx writes the sections alphabetically, so the file lists `Aircraft` first and `Overrides` last
+whatever order they are described in here.
+
+| Section | Key | Default | Meaning |
+| --- | --- | --- | --- |
+| `Config` | `Enabled` | `true` | Master switch. |
+| `Overrides` | `OverridePitch` | `false` | Pitch comes from `Helicopter Pitch`. |
+| `Overrides` | `OverrideRoll` | `true` | Roll comes from `Helicopter Roll`. |
+| `Overrides` | `OverrideYaw` | `true` | Yaw comes from `Helicopter Yaw`. |
+| `Overrides` | `OverrideCollective` | `false` | Collective comes from `Helicopter Collective`. |
+| `Aircraft` | `UseAircraftList` | `false` | `false` = automatic rotorcraft detection. `true` = `HeliBindsAircraft.json` decides. |
 
 **The overrides are per axis, and default to off for pitch and collective on purpose.** This mod
 *replaces* a binding rather than adding to it, so enabling an override for an axis you never bound
