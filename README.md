@@ -7,6 +7,7 @@ aimed at mouse-and-keyboard play.
 | --- | --- |
 | [**ChaseCamPlus**](ChaseCamPlus/) | Makes the chase camera usable on mouse and keyboard: virtual joystick in third person, a free look chase never had, a cockpit ↔ chase toggle, and the flight HUD restored in chase. |
 | [**HeliBinds**](HeliBinds/) | Separate flight bindings for rotorcraft, switched automatically by aircraft — no external key remapper, no mode to remember. |
+| [**MouseDPI**](MouseDPI/) | Scales the mouse input driving the virtual joystick past the sensitivity slider's ceiling, expressed as a DPI you would like your mouse to have. |
 
 Each folder has its own README with the full config reference.
 
@@ -17,9 +18,10 @@ Each folder has its own README with the full config reference.
 ## Install
 
 Drop the mod's `.dll` into `BepInEx\plugins\<ModName>\`, launch once to generate its config and
-register its keybinds, then assign them under **Settings → Controls → Flight Controls**.
+register its keybinds, then assign them under **Settings → Controls → Flight Controls**. MouseDPI
+has no keybinds of its own; the other two do.
 
-Both mods are client-side and send nothing new over the network — the control inputs they produce
+All three are client-side and send nothing new over the network — the control inputs they produce
 travel the same path, with the same clamping, the game already uses.
 
 ## Building
@@ -27,6 +29,7 @@ travel the same path, with the same clamping, the game already uses.
 ```
 dotnet build ChaseCamPlus/ChaseCamPlus/ChaseCamPlus.csproj -c Release
 dotnet build HeliBinds/HeliBinds/HeliBinds.csproj -c Release
+dotnet build MouseDPI/MouseDPI/MouseDPI.csproj -c Release
 ```
 
 Each project resolves the game assemblies through its own `GameDir.targets`.
@@ -35,9 +38,10 @@ Each project resolves the game assemblies through its own `GameDir.targets`.
 
 Rewired stores keybindings by numeric action id. The allocation scheme most Nuclear Option mods
 inherit assigns those ids in plugin load order, so installing or removing an unrelated mod can shift
-them and silently reassign a binding you made. Both mods here derive their ids from a hash of the
-action name, so the number is the same every launch no matter what else is installed, falling back to
-the usual scheme with a logged warning only if something already occupies it.
+them and silently reassign a binding you made. The two mods here that add keybinds derive their ids
+from a hash of the action name, so the number is the same every launch no matter what else is
+installed, falling back to the usual scheme with a logged warning only if something already occupies
+it.
 
 Where these mods patch shared game code they count their edits and expect an exact number. If a game
 update changes what they target, the mismatch is logged and the original code is left untouched, so
